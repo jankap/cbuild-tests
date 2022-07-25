@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/schemas/projmgr/0.9.4/tools/projmgr/schemas/cproject.schema.json
+
+project:
+    device: STM32F103TB
+    add-paths:
+      - ../inc
+      # we really would like to add some stuff from the RTE folder to the path...
+      # - ./RTE/ # fails with "Path not found '../../RTE'"
+    groups:
+        - group: inc
+          files:
+              - file: ../inc/test.h
+
+            # try out access sequences
+              # - file: $Bname$.c # fails with Path not found: '/workspaces/cbuild-tests/prj/generated-projects/test.release+HW_A/../../.c'!
+              # - file: $Project$/test.h # warning csolution: unknown access sequence: 'Project'
+              # - file: $Compiler$/test.h # warning csolution: unknown access sequence: 'Compiler'
+              - file: $Bname$/$Dname$.c # Path not found: '/$Dname$.c'!
+            
+            # how to get the VERSION.h in RTE?
+             # - file: ./RTE/VERSION.h
+
+        - group: src
+          files:
+              - file: ../src/main.c
+
+    components:
+        - component: ARM::CMSIS:CORE@5.6.0
+        - component: Device:Startup@1.0.0
+

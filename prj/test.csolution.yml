@@ -1,0 +1,118 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Open-CMSIS-Pack/devtools/schemas/projmgr/0.9.4/tools/projmgr/schemas/csolution.schema.json
+
+solution:
+    target-types:
+
+        - type: HW_A
+          device: STM32F103TB
+          defines:
+              - USE_CAN
+
+        - type: HW_B
+          device: STM32F103TB
+          defines:
+              - NO_USE_CAN
+
+    build-types:
+        - type: debug
+          compiler: AC6
+          debug: on
+          defines:
+              - ARM_MATH_CM3
+              - USE_STDPERIPH_DRIVER
+              - DEBUG
+              - USE_FULL_ASSERT
+          misc:
+              - C:
+                    - -O1
+                    # - -g # gdwarf-4
+                    - -gdwarf-4
+                    - -std=c99
+                    - -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality
+                    - -ffunction-sections # for optimization
+                    # - -fno-function-sections # disable section optimization
+                    - -fno-rtti # compatibility to µVision
+                    - -funsigned-char
+                    # - -mfloat-abi=soft
+                    - -ffp-mode=std # do not use NAN or INF!
+                    # - -ffp-mode=full
+                    - -fno-short-enums # 32 bit enums
+                    - -fno-short-wchar # 32 bit wchars
+                    - -D__MICROLIB # define ONLY if using microlib in linker!
+                    - -xc
+                    - -c
+                    - --target=arm-arm-none-eabi
+              - ASM:
+                    - -masm=auto
+                    - -D__MICROLIB # define ONLY if using microlib in linker!
+                    - -gdwarf-4
+
+              - Link:
+                    - --info=summarystack,stack,unused,sizes,any,common,debug,inputs,summarysizes,totals,veneers
+                    - --summary_stderr
+                    - --callgraph
+                    - --strict # more warnings
+                    - --list test.map
+                    - --library_type=microlib # define ONLY if using microlib in linker!
+                    - --debug
+                    - --any_sort_order=descending_size
+                    - --any_placement=worst_fit # https://developer.arm.com/documentation/100070/0612/linker-command-line-options/--any-placement-algorithm?lang=en
+                    - --sort=Lexical
+                    - --map
+                    - --load_addr_map_info
+                    - --xref
+                    - --symbols
+                    - --any_contingency
+                    - --entry Reset_Handler
+                    - --first __Vectors
+
+        - type: release
+          compiler: AC6
+          debug: off
+          defines:
+              - ARM_MATH_CM3
+              - USE_STDPERIPH_DRIVER
+          misc:
+              - C:
+                    - -O1
+                    - -std=c99
+                    - -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality
+                    - -ffunction-sections # for optimization
+                    # - -fno-function-sections # disable section optimization
+                    - -fno-rtti # compatibility to µVision
+                    - -funsigned-char
+                    # - -mfloat-abi=soft
+                    - -ffp-mode=std # do not use NAN or INF!
+                    # - -ffp-mode=full
+                    - -fno-short-enums # 32 bit enums
+                    - -fno-short-wchar # 32 bit wchars
+                    - -D__MICROLIB # define ONLY if using microlib in linker!
+                    - -xc
+                    - -c
+                    - --target=arm-arm-none-eabi
+              - ASM:
+                    - -masm=auto
+                    - -D__MICROLIB # define ONLY if using microlib in linker!
+              - Link:
+                    - --info=summarystack,stack,unused,sizes,any,common,debug,inputs,summarysizes,totals,veneers
+                    - --summary_stderr
+                    - --callgraph
+                    - --strict # more warnings
+                    - --list test.map
+                    - --library_type=microlib # define ONLY if using microlib in linker!
+                    - --any_sort_order=descending_size
+                    - --any_placement=worst_fit # https://developer.arm.com/documentation/100070/0612/linker-command-line-options/--any-placement-algorithm?lang=en
+                    - --sort=Lexical
+                    - --map
+                    - --load_addr_map_info
+                    - --xref
+                    - --symbols
+                    - --any_contingency
+                    - --entry Reset_Handler
+                    - --first __Vectors
+
+
+    projects:
+        - project: test.cproject.yml
+        #- execute:
+        #  run: CalcHash.bat $H %H SHA1 @H
