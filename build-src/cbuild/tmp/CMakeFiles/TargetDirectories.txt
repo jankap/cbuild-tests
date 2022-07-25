@@ -1,4 +1,0 @@
-/workspaces/cbuild-tests/build-src/cbuild/tmp/CMakeFiles/database.dir
-/workspaces/cbuild-tests/build-src/cbuild/tmp/CMakeFiles/test.release+HW_A.dir
-/workspaces/cbuild-tests/build-src/cbuild/tmp/CMakeFiles/edit_cache.dir
-/workspaces/cbuild-tests/build-src/cbuild/tmp/CMakeFiles/rebuild_cache.dir
